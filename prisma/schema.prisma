@@ -41,3 +41,17 @@ enum Role {
   PATIENT
   DOCTOR
 }
+
+model Appointment {
+  id          String   @id @default(uuid())
+  name        String
+  curp        String
+  infoContact String
+  birthDate   DateTime
+  doctorName  String
+  specialty   String
+  reason      String
+  calendar    DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
