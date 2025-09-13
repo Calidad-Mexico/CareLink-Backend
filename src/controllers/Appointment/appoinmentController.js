@@ -72,5 +72,6 @@ const getAppointments = async (req, res) => {
 }
 
 export {
-    createAppointment
+    createAppointment,
+    getAppointments
 }
