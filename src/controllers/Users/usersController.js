@@ -7,7 +7,7 @@ const createUserPatient = async (req, res) => {
 
     await check("email", "El correo no es válido").isEmail().run(req);
     await check("password", "El password debe de ser mínimo 6 caracteres").isLength({ min: 6 }).run(req);
-    await check("repeatPassword", "El password debe de ser mínimo 6 caracteres").isLength({ min: 6 }).run(req);
+    await check("repeatPassword".equal(password).run(req);
     await check("curp", "La CURP no es válida").isLength({ min: 18, max: 18 }).run(req);
 
     const errors = validationResult(req);
@@ -47,6 +47,8 @@ const createUserDoctor = async (req, res) => {
     await check("password", "El password debe de ser mínimo 6 caracteres").isLength({ min: 6 }).run(req);
     await check("repeatPassword", "El password debe de ser mínimo 6 caracteres").equals(password).isLength({ min: 6 }).run(req);
     await check("curp", "La CURP no es válida").isLength({ min: 18, max: 18 }).run(req);
+    await check("rfc", "El RFC no es válido").notEmpty().isLength({ min: 10, max: 15 }).run(req);
+    await check("specialty", "La especialidad es obligatoria").notEmpty().run(req);
 
     const errors = validationResult(req);
 
