@@ -6,7 +6,7 @@ const loginUser = async (req, res) => {
     const {email, password} = req.body;
 
     await check("email", "El correo no es válido").isEmail().run(req);
-    await check("password", "El password debe de ser mínimo 6 caracteres").isLength({min: 6}).run(req);
+    await check("password", "Por favor ingresar su contraseña").notEmpty().run(req);
 
     const errors = validationResult(req);
 
