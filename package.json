@@ -15,7 +15,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server/index.js"
+    "dev": "nodemon src/server/index.js",
+    "start": "node src/server/index.js"
   },
   "dependencies": {
     "@prisma/client": "^6.16.1",
