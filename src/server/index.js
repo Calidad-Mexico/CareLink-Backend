@@ -12,6 +12,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Server activo
+app.get("/serverAlive", (req, res) => {
+    res.status(200).json({ message: `Server is alive on port ${app.get("port")}` });
+})
+
 // Rutas
 app.use("/users", userRoutes)
 
