@@ -2,12 +2,46 @@ import bcrypt from 'bcrypt';
 import { prisma } from '../../../prisma/prisma.js';
 import { check, validationResult } from "express-validator";
 
+const loginUser = async (req, res) => {
+    const {email, password} = req.body;
+
+    await check("email", "El correo no es válido").isEmail().run(req);
+    await check("password", "El password debe de ser mínimo 6 caracteres").isLength({min: 6}).run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({errors: errors.array()});
+    }
+
+    try {
+        const user = await prisma.userPacient.findUnique({
+            where: {email}
+        }) || await prisma.userDoctor.findUnique({
+            where: {email}
+        });
+
+        if (!user) {
+            return res.status(400).json({message: 'Usuario no encontrado'});
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            return res.status(400).json({message: 'Contraseña incorrecta'});
+        }
+
+        res.status(200).json({message: 'Usuario logueado exitosamente', user});
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+}
+
 const createUserPatient = async (req, res) => {
     const { email, password, repeatPassword, curp } = req.body;
 
     await check("email", "El correo no es válido").isEmail().run(req);
     await check("password", "El password debe de ser mínimo 6 caracteres").isLength({ min: 6 }).run(req);
-    await check("repeatPassword".equal(password).run(req);
+    await check("repeatPassword").equals(password).run(req);
     await check("curp", "La CURP no es válida").isLength({ min: 18, max: 18 }).run(req);
 
     const errors = validationResult(req);
@@ -82,6 +116,7 @@ const createUserDoctor = async (req, res) => {
 }
 
 export {
+    loginUser,
     createUserPatient,
     createUserDoctor
 }
