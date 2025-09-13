@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import userRoutes from "../routes/Users/userRoutes.js";
+import appointmentRoutes from "../routes/Appointment/appointmentRoutes.js";
 
 // Configuracion del servidor
 const app = express();
@@ -19,6 +20,7 @@ app.get("/serverAlive", (req, res) => {
 
 // Rutas
 app.use("/users", userRoutes)
+app.use("/appointments", appointmentRoutes)
 
 app.listen(app.get("port"), () => {
     console.log(`Server on port ${app.get("port")}`);
