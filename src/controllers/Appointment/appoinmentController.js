@@ -43,6 +43,34 @@ const createAppointment = async (req, res) => {
     }
 }
 
+const getAppointments = async (req, res) => {
+    const { curp } = req.params;
+
+    await check("curp", "La CURP no es válida o es necesaria").isLength({ min: 18, max: 18 }).run(req);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const appointments = await prisma.appointment.findMany({
+            where: {
+                curp
+            }
+        });
+
+        if (!appointments) {
+            return res.status(404).json({ message: 'No se encontraron citas para la CURP proporcionada' });
+        }
+
+        res.status(200).json({ appointments });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 export {
     createAppointment
 }
